@@ -2,6 +2,6 @@
 {
     public class AuthSettings
     {
-        public string TokenId { get; set; }
+        public required string TokenId { get; set; }
     }
 }

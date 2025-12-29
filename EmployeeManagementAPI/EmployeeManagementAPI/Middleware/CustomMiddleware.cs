@@ -1,5 +1,4 @@
 ﻿using EmployeeManagementAPI.DTOs;
-using System.Security.Claims;
 
 namespace EmployeeManagementAPI.Middleware
 {
@@ -26,6 +25,7 @@ namespace EmployeeManagementAPI.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
+            _logger.LogInformation("Handling request: " + context.Request.Method + " " + context.Request.Path);
             var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
 
             if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
@@ -45,6 +45,7 @@ namespace EmployeeManagementAPI.Middleware
             }
 
             await _next(context);
+            _logger.LogInformation("Finished handling request.");
         }
     }
 }
