@@ -1,0 +1,40 @@
+﻿/EmployeeManagementAPI
+│
+├── Controllers/                # API controllers (entry points for HTTP requests)
+│   └── WeatherForecastController.cs
+│
+├── DTOs/                      # Data Transfer Objects (for API requests/responses)
+│   └── WeatherForecastDto.cs
+│
+├── Models/                    # Entity models (database entities)
+│   └── WeatherForecast.cs
+│
+├── Repositories/              # Repository interfaces and implementations
+│   ├── Interfaces/
+│   │   └── IWeatherForecastRepository.cs
+│   └── WeatherForecastRepository.cs
+│
+├── Services/                  # Business logic/services
+│   ├── Interfaces/
+│   │   └── IWeatherForecastService.cs
+│   └── WeatherForecastService.cs
+│
+├── Data/                      # Database context and migrations
+│   └── AppDbContext.cs
+│
+├── Mappings/                  # AutoMapper profiles (if using AutoMapper)
+│   └── WeatherForecastProfile.cs
+│
+├── Program.cs                 # Main entry point
+├── appsettings.json           # Configuration
+└── ...                        # Other files (e.g., Startup.cs, Properties, etc.)
+
+Key Points:
+•	Controllers: Handle HTTP requests and responses.
+•	DTOs: Define shapes of data sent to/from clients.
+•	Models: Represent database entities.
+•	Repositories: Abstract data access logic (interfaces and implementations).
+•	Services: Contain business logic, call repositories.
+•	Data: Contains DbContext and migration files.
+•	Mappings: For mapping between models and DTOs (optional, if using AutoMapper).
+This structure is scalable and aligns with best practices for .NET Core Web APIs using the repository pattern.
