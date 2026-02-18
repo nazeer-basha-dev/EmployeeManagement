@@ -1,48 +1,34 @@
-﻿using EmployeeManagementAPI.DTOs;
-using Microsoft.OpenApi.Models;
+using Asp.Versioning;
+using Asp.Versioning.Conventions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.Configure<AuthSettings>(
-//    builder.Configuration.GetSection("AuthSettings"));
-
-//Or if you want to inject it directly:
-builder.Services.AddSingleton(sp => builder.Configuration.GetSection("AuthSettings").Get<AuthSettings>());
-
 // Add services to the container.
+
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddApiVersioning(options =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
-
-    // Add JWT Bearer Authorization
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Enter 'Bearer' followed by your token"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = ApiVersionReader.Combine(
+        new QueryStringApiVersionReader("api-version"),
+        new HeaderApiVersionReader("x-api-version"),
+        new MediaTypeApiVersionReader("api-version")
+        );
+}).AddMvc(options =>
+{
+    options.Conventions.Add(new VersionByNamespaceConvention());
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'V";
+    options.SubstituteApiVersionInUrl = true;
 });
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -55,10 +41,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// 🔐 Authorization should come after routing
-app.UseMiddleware<EmployeeManagementAPI.Middleware.CustomMiddleware>();
-
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
