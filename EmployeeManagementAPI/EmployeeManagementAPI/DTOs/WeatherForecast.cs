@@ -2,7 +2,8 @@ namespace EmployeeManagementAPI.DTOs
 {
     public class WeatherForecast
     {
-        public DateOnly Date { get; set; }
+        // Use DateTime for broader compatibility with Swagger/OpenAPI generation
+        public DateTime Date { get; set; }
 
         public int TemperatureC { get; set; }
 

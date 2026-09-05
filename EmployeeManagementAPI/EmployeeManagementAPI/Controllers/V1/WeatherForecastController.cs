@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace EmployeeManagementAPI.Controllers.V1
 {
     [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
-    [Route("api/WeatherForecast")]
+    [Route("api/v1/[controller]")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiVersion("1.0")]
     public class WeatherForecastController : ControllerBase
     {
@@ -42,10 +42,22 @@ namespace EmployeeManagementAPI.Controllers.V1
                 Message = "Result from WeatherForecast 1.0 Controller",
                 Forecast = Enumerable.Range(1, 5).Select(index => new WeatherForecast
                 {
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                    Date = DateTime.Now.AddDays(index),
                     TemperatureC = Random.Shared.Next(-20, 55),
                     Summary = Summaries[Random.Shared.Next(Summaries.Length)]
                 })
+            });
+        }
+
+        // GET api/v1/WeatherForecast/cities
+        [HttpGet("cities")]
+        public ActionResult GetCities()
+        {
+            var cities = new[] { "Hyderabad", "Bengaluru", "Chennai", "Mumbai", "Delhi" };
+            return Ok(new
+            {
+                Message = "Cities available in v1",
+                Cities = cities
             });
         }
     }
